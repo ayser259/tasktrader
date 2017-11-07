@@ -16,5 +16,10 @@ Remaining Tasks:
 
 
 
-Completed on November 6th:
-- Finish Django set-up
+Completed on 23-14-6th-nov-17:
+- Finished Django set-up
+- Began creating models
+  - Finished models:
+    - Company
+    - Location
+    - Department
