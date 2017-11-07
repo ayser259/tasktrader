@@ -1,0 +1,20 @@
+Development Log:
+
+
+
+
+Remaining Tasks:
+
+- Finish making models for Task tasktrader
+- Create HTML files from PHP files from V.0.0, exclude all PHP
+- Create Views for each page that exists in HTML
+- Create Methods for each PHP Function
+- Clean up HTML and strip away remaining PHP
+- Migrate models and run site
+
+
+
+
+
+Completed on November 6th:
+- Finish Django set-up
