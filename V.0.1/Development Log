@@ -5,13 +5,17 @@ Development Log:
 
 Remaining Tasks:
 
-- Finish making models for Task tasktrader
+
 - Create HTML files from PHP files from V.0.0, exclude all PHP
 - Create Views for each page that exists in HTML
 - Create Methods for each PHP Function
 - Clean up HTML and strip away remaining PHP
 - Migrate models and run site
 
+
+
+Completed on 21:46-11th-nov-17:
+- Finished Working on models
 
 
 Completed on 22:21-7th-nov-17:
