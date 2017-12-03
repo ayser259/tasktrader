@@ -151,3 +151,6 @@ class Random_Task(models.Model):
     def __str__(self):
         return_value = ("employee: "+str(self.employee_id.id)+ ", Task: "+ str(self.task_id.id))
         return return_value
+
+class Current_User(models.Model):
+    am = models.ForeignKey(Employee, on_delete = models.CASCADE)

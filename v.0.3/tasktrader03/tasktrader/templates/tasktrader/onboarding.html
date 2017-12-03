@@ -1,0 +1,173 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
+
+<head>
+  <title>Tasktrader | Onboarding</title>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" type="text/css" href="../static/main.css">
+  <link href="https://fonts.googleapis.com/css?family=Muli:200,300,300i,400,600,600i,700,800,900" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jquery-tagsinput/1.3.6/jquery.tagsinput.min.css">
+  <script
+  src="https://code.jquery.com/jquery-3.2.1.min.js"
+  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
+  crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-tagsinput/1.3.6/jquery.tagsinput.min.js"></script>
+  <script src="../static/tasktrader.js"></script>
+ </head>
+
+<body class="page_body">
+  <!-- Navbar -->
+<nav id="navigation_bar">
+      <h1 id="page_header">Task Trader</h1>
+      <a href="{% url 'explore' %}" class="nav_link">Explore</a>
+      <a href="{% url 'dashboard' %}" class="nav_link">Dashboard</a>
+      <a href="{% url 'profile' %}" class="nav_link">Profile</a>
+</nav>
+  <!-- Creating a new company -->
+<div align = "center" style="border: solid 1px #000000;">
+  <caption style="font-size:20px;">Onboard New Company</caption>
+  <form id="add_new_company" action ="{% url 'add_new_company' %}" method ='post' border = 1>
+    {% csrf_token %}
+    <label class="">Company Name</label>
+    <input type = "text" name ="company_name" />
+    <input type= "submit" value = "Create"/>
+  </form>
+</div>
+
+    <!-- Creating a new location -->
+  <div align = "center" style="border: solid 1px #000000;">
+    <caption style="font-size:20px;">Onboard New Location</caption>
+    <form id="add_new_location" action ="{% url 'add_new_location' %}" method ='post' border = 1>
+      {% csrf_token %}
+            <label class="">Campus Name : </label>
+            <input type="text" name="campus_name" required/>
+
+            <label class="">Company: </label>
+            <select id="new_location_company" name="new_location_company_id" placeholder="Which company is this location for?" required>
+                {% for company in company_set %}
+                    <option value="{{ company.id }}">{{ company.company_name }}</option>
+                {% endfor %}
+            </select>
+
+            <label class="">City : </label>
+            <input type="text" name="city" required />
+
+            <label class="">Country : </label>
+            <input type="text" name="country" required />
+
+            <label class="">Street Address : </label>
+            <input type="text" name="street_address" required/>
+
+            <label class="">Postal Code : </label>
+            <input type="text" name="postal_code" required />
+
+            <input type= "submit" value = "Create"/>
+    </form>
+  </div>
+
+  <!-- Creating a new department -->
+<div align = "center" style="border: solid 1px #000000;">
+  <caption style="font-size:20px;">Onboard New Department</caption>
+  <form id="add_new_department" action ="{% url 'add_new_department' %}" method ='post' border = 1>
+    {% csrf_token %}
+          <label class="">Department Name : </label>
+          <input type="text" name="department_name" required />
+
+          <label class="">Company: </label>
+          <select id="new_department_company" name="new_department_company_id" placeholder="Which company is this department for?" required>
+              {% for company in company_set %}
+                  <option value="{{ company.id }}">{{ company.company_name }}</option>
+              {% endfor %}
+          </select>
+
+    <input type= "submit" value = "Create"/>
+  </form>
+</div>
+
+<!-- Creating a new employee -->
+<div align = "center" style="border: solid 1px #000000;" name = "New name" title= "new Titke">
+<caption style="font-size:20px;">Onboard New Employee</caption>
+<form id="add_new_employee" action ="{% url 'add_new_employee' %}" method ='post' border = 1 name = "Onboard New Employee :">
+  {% csrf_token %}
+        <label class="">First Name : </label>
+        <input type="text" name="first_name" required />
+        <label class="">Last Name : </label>
+        <input type="text" name="last_name" required />
+        <label class="">Job Title : </label>
+        <input type="text" name="job_title" required />
+        <label class="">Company: </label>
+        <select id="new_employee_company" name="new_employee_company_id" placeholder="Which company does this employee work for?" required>
+            {% for company in company_set %}
+                <option value="{{ company.id }}">{{ company.company_name }}</option>
+            {% endfor %}
+        </select>
+
+        <label class="">Location: </label>
+        <select id="new_employee_location" name="new_employee_location_id" placeholder="Which location does this employee work at?" required>
+            {% for location in location_set %}
+                <option value="{{ location.id }}">{{ location.campus_name }}</option>
+            {% endfor %}
+        </select>
+
+        <label class="">Department: </label>
+        <select id="new_employee_Department" name="new_employee_department_id" placeholder="Which department does this employee work for?" required>
+            {% for department in department_set %}
+                <option value="{{ department.id }}">{{ department.department_name }}</option>
+            {% endfor %}
+        </select>
+
+        <input type= "submit" value = "Create"/>
+</form>
+</div>
+
+  <div style="border: solid 1px #000000;">
+    <table border =1>
+        <caption style="font-size:20px;">Company Locations</caption>
+        <tr>
+          <th>Company</th>
+          <th>Location</th>
+        </tr>
+        {% for company in company_set %}
+        <tr>
+            <td>{{ company.company_name }}</td>
+            <td></td>
+        </tr>
+        {% endfor %}
+        {% for location in location_set %}
+        <tr>
+            <td>{{ location.company_id.company_name }}</td>
+            <td>{{ location.campus_name }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+  </div>
+
+  <div style="border: solid 1px #000000;">
+    <table border=1>
+        <caption style="font-size:20px;">Company Departments</caption>
+        <tr>
+          <th>Company</th>
+          <th>Department</th>
+        </tr>
+        {% for company in company_set %}
+        <tr>
+            <td>{{ company.company_name }}</td>
+            <td></td>
+        </tr>
+        {% endfor %}
+        {% for department in department_set %}
+        <tr>
+            <td>{{ department.company_id.company_name }}</td>
+            <td>{{ department.department_name }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+  </div>
+
+</body>
+</html>
