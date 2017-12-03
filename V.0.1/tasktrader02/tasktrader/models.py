@@ -2,7 +2,6 @@ from django.db import models
 from datetime import datetime
 
 # Models representing objects that will make up tasktrader
-
 class Company(models.Model):
     id = models.AutoField(primary_key =True)
     company_name = models.CharField(max_length = 30)
@@ -14,6 +13,7 @@ class Company(models.Model):
 class Location(models.Model):
     id = models.AutoField(primary_key=True)
     campus_name = models.CharField(max_length=30)
+    company_id = models.ForeignKey(Company, on_delete=models.CASCADE, default = -1)
     city = models.CharField(max_length=30)
     country = models.CharField(max_length=30)
     street_address = models.CharField(max_length=30)
