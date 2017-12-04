@@ -5,17 +5,29 @@ Note :
 - tasktrader02 is the website
 - tasktrader is the web app
 
-
-
 Remaining Tasks:
+- create a log-in page, and is_logged_in method to diver to and pass users through
+- Implement Current_User accross all pages, similar to current_form from plant apps
+- Add current user to Created_task view
 
 
-- Create HTML files from PHP files from V.0.0, exclude all PHP
-- Create Views for each page that exists in HTML
-- Create Methods for each PHP Function
-- Clean up HTML and strip away remaining PHP
-- Migrate models and run site
-- Finished implementing architecture
+- Skills for each task ? How to populate 
+- View to See tasks that have already been made
+- Create view to search for tasks
+
+- create view to apply for tasks
+
+- edit profile view 
+
+- view profile
+
+- create view to view and select applicants
+
+
+Completed on 21:00-3rd-Dec-17:
+- Forgot to track log over past few weeks, haven’t uploaded to git
+- MVP almost complete
+- 
 
 
 Completed on 22:13-12th-nov-17:
