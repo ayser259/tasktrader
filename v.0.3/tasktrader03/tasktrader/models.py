@@ -69,7 +69,7 @@ class Task(models.Model):
     task_description = models.CharField(max_length = 50)
     end_date = models.DateField(null=True)
     start_date = models.DateField(null= True)
-    time_commitment = models.DateTimeField(default = datetime.now, blank =True)
+    time_commitment = models.IntegerField(null=True, default=0)
     location = models.ForeignKey(Location, on_delete = models.CASCADE)
     department = models.ForeignKey(Department, on_delete = models.CASCADE)
     status = models.ForeignKey(Status, on_delete = models.CASCADE)

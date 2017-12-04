@@ -248,7 +248,43 @@ def applied(request):
     return render(request, 'tasktrader/applied.html')
 
 def create(request):
-    return render(request, 'tasktrader/create.html')
+    try:
+        print("Accessed create..")
+        if request.method == 'POST':
+            print("Adding new task...")
+            post_dict = request.POST
+            print(post_dict)
+            if post_dict['task_title']!="" and post_dict['task_description']!= "" and post_dict['start_date']!="" and post_dict['end_date']!="" and post_dict['time_commitment']!="" and post_dict['new_task_location_id']!="" and post_dict['new_task_department_id']!="" :
+                new_task = Task(task_title=post_dict['task_title'])
+                new_task.task_description = post_dict['task_description']
+                new_task.start_date = datetime.strptime(str(post_dict['start_date']), '%Y-%m-%d').date()
+                new_task.end_date = datetime.strptime(str(post_dict['end_date']), '%Y-%m-%d').date()
+                new_task.time_commitment = int(post_dict['time_commitment'])
+                new_task.location = Location.objects.get(id=int(post_dict['new_task_location_id']))
+                new_task.department = Department.objects.get(id=int(post_dict['new_task_department_id']))
+                new_task.status = Status.objects.get(id = 1)
+                new_task.save()
+                return HttpResponse("New Task Created")
+            else:
+                return HttpResponse("Something went wrong...(create)")
+        else:
+            company_set = Company.objects.all()
+            location_set = Location.objects.all()
+            department_set = Department.objects.all()
+            context = {'company_set':company_set,'location_set':location_set,'department_set':department_set}
+            return render(request, 'tasktrader/create.html',context)
+    except ObjectDoesNotExist as e:
+        print("There is no answer that exist the database: ", str(e))
+        return HttpResponse("Something went wrong...(create)")
+    except ValueError:
+        print("Could not convert data to an integer.")
+        return HttpResponse("Something went wrong...create)")
+    except:
+        print("Unexpected error:", sys.exc_info()[0])
+        return HttpResponse("Something went wrong...create)")
+    else:
+        print('Something went wrong...')
+        return HttpResponse("Something went wrong...create)")
 
 def dashboard(request):
     return render(request, 'tasktrader/dashboard.html')
