@@ -19,6 +19,7 @@ urlpatterns = [
     url(r'onboarding', views.onboarding, name='onboarding'),
 # urls to intereact with db
     url(r'add_new_company', views.add_new_company, name='add_new_company'),
+    url(r'add_new_skill', views.add_new_skill, name='add_new_skill'),
     url(r'add_new_location', views.add_new_location, name='add_new_location'),
     url(r'add_new_department', views.add_new_department, name='add_new_department'),
     url(r'add_new_employee', views.add_new_employee, name='add_new_employee'),

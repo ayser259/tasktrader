@@ -40,16 +40,16 @@
             <input type="text" name="task_title" required/>
 
             <label class="">Task Description: </label>
-            <textarea name="task_description" cols="40" rows="5"></textarea>
+            <textarea name="task_description" cols="40" rows="5" required></textarea>
 
             <label class="">Task Start Date: </label>
-            <input type="date" name="start_date">
+            <input type="date" name="start_date" required>
 
             <label class="">Task End Date: </label>
-            <input type="date" name="end_date">
+            <input type="date" name="end_date" required>
 
             <label class="">Weekly Time Commitment (hours)</label>
-            <input type="number" name="time_commitment">
+            <input type="number" name="time_commitment" required>
 
             <label class="">Location: </label>
             <select id="new_task_location" name="new_task_location_id" placeholder="Which location is this task being completed for?" required>
@@ -65,9 +65,24 @@
                 {% endfor %}
             </select>
 
+            <label class="">Required Skills for the Task: </label>
+            {% for skill in skill_set %}
+                <input type="checkbox" name="skill" value="{{ skill.id }}">{{ skill.skill_name }}<br>
+                <option value="{{ skill.id }}"></option>
+            {% endfor %}
+
             <input type= "submit" value = "Create"/>
     </form>
-  </div>
+</div>
+<div align = "center" style="border: solid 1px #000000;">
+  <caption style="font-size:20px;">Create a New Skill</caption>
+    <form id="add_new_skill" action ="{% url 'add_new_skill' %}" method ='post' border = 1>
+      {% csrf_token %}
+            <label class="">Skill: </label>
+            <input type="text" name="skill" required/>
+            <input type= "submit" value = "Add"/>
+    </form>
+</div>
 
 
 

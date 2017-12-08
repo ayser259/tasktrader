@@ -6,9 +6,6 @@ Note :
 - tasktrader is the web app
 
 Remaining Tasks:
-- create a log-in page, and is_logged_in method to diver to and pass users through
-- Implement Current_User accross all pages, similar to current_form from plant apps
-- Add current user to Created_task view
 
 
 - Skills for each task ? How to populate 

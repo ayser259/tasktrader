@@ -212,6 +212,43 @@ def add_new_department(request):
         print('Something went wrong...')
         return HttpResponse("Something went wrong...(add new dept)")
 
+# method to create new skills through the onboading page
+def add_new_skill(request):
+    try:
+        print("Accessed add_new_skills..")
+        if request.method == 'POST':
+            print("Adding new skill...")
+            post_dict = request.POST
+            print(post_dict)
+            if post_dict['skill']!="":
+                all_skills = Skill.objects.all()
+                add_new = True
+                skill = post_dict['skill']
+                skill = skill.upper()
+                for item in all_skills :
+                    if skill == item.skill_name:
+                        add_new = False
+                if add_new:
+                    new_skill = Skill(skill_name = skill)
+                    new_skill.save()
+                    return HttpResponse("New Skill Created")
+                else:
+                    return HttpResponse("Skill Already Exists")
+                return HttpResponse("Something went wrong...(add new dept)")
+            return HttpResponse("Something went wrong...(add new dept)")
+        return HttpResponse("Something went wrong...(add new dept)")
+    except ObjectDoesNotExist as e:
+        print("There is no answer that exist the database: ", str(e))
+        return HttpResponse("Something went wrong...(add new dept)")
+    except ValueError:
+        print("Could not convert data to an integer.")
+        return HttpResponse("Something went wrong...(add new dept)")
+    except:
+        print("Unexpected error:", sys.exc_info()[0])
+        return HttpResponse("Something went wrong...(add new dept)")
+    else:
+        print('Something went wrong...')
+        return HttpResponse("Something went wrong...(add new dept)")
 
 # method to create new employees through the onboading page
 def add_new_employee(request):
@@ -263,7 +300,16 @@ def create(request):
             print("Adding new task...")
             post_dict = request.POST
             print(post_dict)
+
+            if post_dict['skill']!="" :
+                skill_list = post_dict['skill']
+                print(skill_list)
+                for skill in skill_list:
+                    print('This is a new skill')
+                    print(int(skill))
+
             if post_dict['task_title']!="" and post_dict['task_description']!= "" and post_dict['start_date']!="" and post_dict['end_date']!="" and post_dict['time_commitment']!="" and post_dict['new_task_location_id']!="" and post_dict['new_task_department_id']!="" :
+
                 new_task = Task(task_title=post_dict['task_title'])
                 new_task.task_description = post_dict['task_description']
                 new_task.start_date = datetime.strptime(str(post_dict['start_date']), '%Y-%m-%d').date()
@@ -273,27 +319,33 @@ def create(request):
                 new_task.department = Department.objects.get(id=int(post_dict['new_task_department_id']))
                 new_task.status = Status.objects.get(id = 1)
                 new_task.save()
+                new_posted_task = Posted_Task()
+                new_posted_task.task_id = Task.objects.get(id=int(new_task.id))
+                new_posted_task.employee_id = Employee.objects.get(id=1)
+                new_posted_task.save()
+
                 return HttpResponse("New Task Created")
             else:
-                return HttpResponse("Something went wrong...(create)")
+                return HttpResponse("Something went wrong...(create) 1")
         else:
             company_set = Company.objects.all()
             location_set = Location.objects.all()
             department_set = Department.objects.all()
-            context = {'company_set':company_set,'location_set':location_set,'department_set':department_set}
+            skill_set = Skill.objects.all()
+            context = {'company_set':company_set,'location_set':location_set,'department_set':department_set,'skill_set':skill_set}
             return render(request, 'tasktrader/create.html',context)
     except ObjectDoesNotExist as e:
         print("There is no answer that exist the database: ", str(e))
         return HttpResponse("Something went wrong...(create)")
     except ValueError:
         print("Could not convert data to an integer.")
-        return HttpResponse("Something went wrong...create)")
+        return HttpResponse("Something went wrong...create) 2")
     except:
         print("Unexpected error:", sys.exc_info()[0])
-        return HttpResponse("Something went wrong...create)")
+        return HttpResponse("Something went wrong...create) 3")
     else:
         print('Something went wrong...')
-        return HttpResponse("Something went wrong...create)")
+        return HttpResponse("Something went wrong...create) 4")
 
 def dashboard(request):
     return render(request, 'tasktrader/dashboard.html')
@@ -314,5 +366,57 @@ def taskresult(request):
     return render(request, 'tasktrader/taskresult.html')
 
 def tasks(request):
-    print('hello')
+    try:
+        print("Accessed create..")
+        if request.method == 'POST':
+            print("Adding new task...")
+            post_dict = request.POST
+            print(post_dict)
+
+            if post_dict['skill']!="" :
+                skill_list = post_dict['skill']
+                print(skill_list)
+                for skill in skill_list:
+                    print('This is a new skill')
+                    print(int(skill))
+
+            if post_dict['task_title']!="" and post_dict['task_description']!= "" and post_dict['start_date']!="" and post_dict['end_date']!="" and post_dict['time_commitment']!="" and post_dict['new_task_location_id']!="" and post_dict['new_task_department_id']!="" :
+
+                new_task = Task(task_title=post_dict['task_title'])
+                new_task.task_description = post_dict['task_description']
+                new_task.start_date = datetime.strptime(str(post_dict['start_date']), '%Y-%m-%d').date()
+                new_task.end_date = datetime.strptime(str(post_dict['end_date']), '%Y-%m-%d').date()
+                new_task.time_commitment = int(post_dict['time_commitment'])
+                new_task.location = Location.objects.get(id=int(post_dict['new_task_location_id']))
+                new_task.department = Department.objects.get(id=int(post_dict['new_task_department_id']))
+                new_task.status = Status.objects.get(id = 1)
+                new_task.save()
+                new_posted_task = Posted_Task()
+                new_posted_task.task_id = Task.objects.get(id=int(new_task.id))
+                new_posted_task.employee_id = Employee.objects.get(id=1)
+                new_posted_task.save()
+
+                return HttpResponse("New Task Created")
+            else:
+                return HttpResponse("Something went wrong...(create) 1")
+        else:
+            company_set = Company.objects.all()
+            location_set = Location.objects.all()
+            department_set = Department.objects.all()
+            skill_set = Skill.objects.all()
+            context = {'company_set':company_set,'location_set':location_set,'department_set':department_set,'skill_set':skill_set}
+            return render(request, 'tasktrader/create.html',context)
+    except ObjectDoesNotExist as e:
+        print("There is no answer that exist the database: ", str(e))
+        return HttpResponse("Something went wrong...(create)")
+    except ValueError:
+        print("Could not convert data to an integer.")
+        return HttpResponse("Something went wrong...create) 2")
+    except:
+        print("Unexpected error:", sys.exc_info()[0])
+        return HttpResponse("Something went wrong...create) 3")
+    else:
+        print('Something went wrong...')
+        return HttpResponse("Something went wrong...create) 4")
+    
     return render(request, 'tasktrader/tasks.html')

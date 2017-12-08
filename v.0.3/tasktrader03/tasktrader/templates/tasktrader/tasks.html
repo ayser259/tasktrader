@@ -1,5 +1,9 @@
+<!DOCTYPE HTML>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
+
 <head>
-  <title>Tasktrader | Login</title>
+  <title>Tasktrader | Search Tasks</title>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -15,3 +19,47 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-tagsinput/1.3.6/jquery.tagsinput.min.js"></script>
   <script src="../static/tasktrader.js"></script>
  </head>
+
+<body class="page_body">
+  <!-- Navbar -->
+  <nav id="navigation_bar">
+        <h1 id="page_header">Task Trader - Create Task</h1>
+        <a href="{% url 'explore' %}" class="nav_link">Explore</a>
+        <a href="{% url 'dashboard' %}" class="nav_link">Dashboard</a>
+        <a href="{% url 'profile' %}" class="nav_link">Profile</a>
+        <a href="{% url 'onboarding' %}" class="nav_link">Onboard</a>
+        <a href="{% url 'create' %}" class="nav_link">Create a new task</a>
+        <a href="{% url 'tasks' %}" class="nav_link">Search Tasks</a>
+  </nav>
+  <!-- Search tasks -->
+
+  <div align = "center" style="border: solid 1px #000000;">
+    <caption style="font-size:20px;">Search Tasks</caption>
+    <form id="create" action ="{% url 'tasks' %}" method ='post' border = 1>
+      {% csrf_token %}
+            <label class="">Weekly Time Commitment (hours)</label>
+            <input type="number" name="time_commitment" required>
+
+            <label class="">Location: </label>
+            <select id="new_task_location" name="new_task_location_id" placeholder="Which location is this task being completed for?" required>
+                <option value='ALL'>All</option>
+                {% for location in location_set %}
+                    <option value="{{ location.id }}">{{ location.campus_name }}</option>
+                {% endfor %}
+            </select>
+            <label class="">Department: </label>
+                    <select id="new_task_department" name="new_task_department_id" placeholder="Which deparment is this task being completed for?" required>
+                    <option value='ALL'>All</option>
+                {% for department in department_set %}
+                    <option value="{{ department.id }}">{{ department.department_name }}</option>
+                {% endfor %}
+            </select>
+            <input type= "submit" value = "Create"/>
+    </form>
+</div>
+
+
+
+
+</body>
+</html>
