@@ -33,22 +33,22 @@
   </nav>
   <!-- Search tasks -->
 
-  <div align = "center" style="border: solid 1px #000000;">
+<div align = "center" style="border: solid 1px #000000;">
     <caption style="font-size:20px;">Search Tasks</caption>
-    <form id="create" action ="{% url 'tasks' %}" method ='post' border = 1>
+    <form id="tasks" action ="{% url 'tasks' %}" method ='post' border = 1>
       {% csrf_token %}
             <label class="">Weekly Time Commitment (hours)</label>
-            <input type="number" name="time_commitment" required>
+            <input type="number" name="time_commitment">
 
             <label class="">Location: </label>
-            <select id="new_task_location" name="new_task_location_id" placeholder="Which location is this task being completed for?" required>
+            <select id="new_task_location" name="task_location_id" placeholder="Which location is this task being completed for?" required>
                 <option value='ALL'>All</option>
                 {% for location in location_set %}
                     <option value="{{ location.id }}">{{ location.campus_name }}</option>
                 {% endfor %}
             </select>
             <label class="">Department: </label>
-                    <select id="new_task_department" name="new_task_department_id" placeholder="Which deparment is this task being completed for?" required>
+                    <select id="new_task_department" name="task_department_id" placeholder="Which deparment is this task being completed for?" required>
                     <option value='ALL'>All</option>
                 {% for department in department_set %}
                     <option value="{{ department.id }}">{{ department.department_name }}</option>
@@ -56,6 +56,28 @@
             </select>
             <input type= "submit" value = "Create"/>
     </form>
+</div>
+
+<div style="border: solid 1px #000000;">
+  <table border =1>
+      <caption style="font-size:20px;">Tasks</caption>
+      <tr>
+        <th>Job Title</th>
+        <th>Deadline</th>
+        <th>Time Commitment</th>
+        <th>Location</th>
+        <th>Deparment</th>
+      </tr>
+      {% for task in task_set %}
+      <tr>
+          <td>{{ task.task_title }}</td>
+          <td>{{ task.start_date }}</td>
+          <td>{{ task.time_commitment }}</td>
+          <td>{{ task.location.campus_name }}</td>
+          <td>{{ task.department.department_name }}</td>
+      </tr>
+      {% endfor %}
+  </table>
 </div>
 
 

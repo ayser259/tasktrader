@@ -12,6 +12,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.urls import reverse
 from django.shortcuts import render, redirect
 from django.template import loader
+import random
+from random import randint, choice
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 import sys
 
@@ -351,7 +353,74 @@ def dashboard(request):
     return render(request, 'tasktrader/dashboard.html')
 
 def explore(request):
-    return render(request, 'tasktrader/explore.html')
+
+    programs = ['PYTHON','SQL','R','PHOTOSHOP','VBA','JAVA','C#','PHOTOGRAPHY','EXCEL',
+                'POWERPOINT','PREZI','PHOTO-EDITING','VIDEO-EDITING','PAINTING','FINANCIAL ANALYSIS','PROGRAMMING','ALGORITHMS',
+                'SUMMARIZATION','PROOF READING']
+
+    PREFIX = ['HELP WITH ', 'NEED EXPERT IN  ',' URGENT HELP IN  ','EXPERT HELP NEEDED IN ','ASSISTANCE REQUIRED WITH ','GUIDANCE NEEDED WITH ','LARGE PROJECT : NEED HELP WITH ']
+    SUFFIX = [' HELP NEEDED',' TASK NEEDED FOR DEPARTMENT PROJECT',' TASK AVAILABLE',' TUTOROIALS REQUIRED']
+    DEPARTMENT = ['CORPORTATE STRATEGY PROJECT','PRODUCT DEVELOPMENT PROJECT','MARKETING PROJECT','ADVERTISING PROJECT','INSTAGRAM PROJECT','WHATSAPP PROJECT','OCULUS PROJECT']
+    res = []
+
+    for item in programs:
+        for pre in PREFIX:
+            res.append(pre+item)
+        for suf in SUFFIX:
+            res.append(item+suf)
+        for dep in DEPARTMENT:
+            res.append(dep)
+
+    res1 = []
+
+    # making list bigger
+    print('expanding list...')
+    for item in res :
+        for i in range(30):
+            res1.append(item)
+
+    # shuffling data
+    print('shuffling...')
+    for i in range(100):
+        a = randint(0, len(res1)-1)
+        b = randint(0,len(res1)-1)
+        first =''
+        second =''
+        first = res1[a]
+        second = res1[b]
+        res1[b] = first
+        res1[a] = second
+
+        year_range = [str(i) for i in range(1900, 2014)]
+        month_range = ["01","02","03","04","05","06","07","08","09","10","11","12"]
+        day_range = [str(i).zfill(2) for i in range(1,28)]
+        num_range = ["11","10","9","8","7","6"]
+        emp_range = ["2","3","4","5","6","7"]
+    for item in res1:
+        new_task = Task()
+        new_task.task_title = item
+        new_task.task_description ="rem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."
+        date_1 = (random.choice(year_range)+'-'+random.choice(month_range)+'-'+random.choice(day_range))
+        date_2 = (random.choice(year_range)+'-'+random.choice(month_range)+'-'+random.choice(day_range))
+        new_task.start_date = datetime.strptime(str(date_1), '%Y-%m-%d').date()
+        new_task.end_date = datetime.strptime(str(date_2), '%Y-%m-%d').date()
+        new_task.time_commitment = random.choice(day_range)
+        new_task.location = Location.objects.get(id=int(random.choice(num_range)))
+        new_task.department = Department.objects.get(id = int(random.choice(num_range)))
+        new_task.status = Status.objects.get(id = 1)
+        new_task.save()
+
+        new_posted_task = Posted_Task()
+        new_posted_task.task_id = Task.objects.get(id=int(new_task.id))
+        new_posted_task.employee_id = Employee.objects.get(id=int(random.choice(emp_range)))
+        new_posted_task.save()
+
+        new_task_skill = Task_Skills()
+        new_task_skill.task_id = new_task
+        new_task_skill.skill_id = Skill.objects.get(id=int(random.choice(emp_range)))
+        new_task_skill.save()
+
+    return HttpResponse('Data Generated')
 
 def insert_task(request):
     return render(request, 'tasktrader/insert_task.html')
@@ -367,56 +436,70 @@ def taskresult(request):
 
 def tasks(request):
     try:
-        print("Accessed create..")
+        print("Accessed tasks..")
+
         if request.method == 'POST':
-            print("Adding new task...")
+            print("searching tasks...")
             post_dict = request.POST
             print(post_dict)
+            print('AA')
+            current_employee = Employee.objects.get(id=1)
+            company = Company.objects.filter(id=int(current_employee.location.company_id.id))
+            location_set = Location.objects.filter(company_id__in=company)
+            task_set = Task.objects.filter(location__in= location_set)
+            department_set = Department.objects.filter(company_id__in=company)
 
-            if post_dict['skill']!="" :
-                skill_list = post_dict['skill']
-                print(skill_list)
-                for skill in skill_list:
-                    print('This is a new skill')
-                    print(int(skill))
+            dep = post_dict['task_department_id']
+            loc = post_dict['task_location_id']
+            com = post_dict['time_commitment']
+            print('com is')
+            print(com)
+            dont_skip_dep = True
+            dont_skip_loc = True
 
-            if post_dict['task_title']!="" and post_dict['task_description']!= "" and post_dict['start_date']!="" and post_dict['end_date']!="" and post_dict['time_commitment']!="" and post_dict['new_task_location_id']!="" and post_dict['new_task_department_id']!="" :
+            if dep == 'ALL':
+                print('YES dep is All')
+                dont_skip_dep = False
+            if loc =='ALL':
+                print('YES loc is All')
+                dont_skip_loc = False
 
-                new_task = Task(task_title=post_dict['task_title'])
-                new_task.task_description = post_dict['task_description']
-                new_task.start_date = datetime.strptime(str(post_dict['start_date']), '%Y-%m-%d').date()
-                new_task.end_date = datetime.strptime(str(post_dict['end_date']), '%Y-%m-%d').date()
-                new_task.time_commitment = int(post_dict['time_commitment'])
-                new_task.location = Location.objects.get(id=int(post_dict['new_task_location_id']))
-                new_task.department = Department.objects.get(id=int(post_dict['new_task_department_id']))
-                new_task.status = Status.objects.get(id = 1)
-                new_task.save()
-                new_posted_task = Posted_Task()
-                new_posted_task.task_id = Task.objects.get(id=int(new_task.id))
-                new_posted_task.employee_id = Employee.objects.get(id=1)
-                new_posted_task.save()
-
-                return HttpResponse("New Task Created")
-            else:
-                return HttpResponse("Something went wrong...(create) 1")
+            if dont_skip_dep:
+                if  post_dict['task_department_id']!="" and isinstance(int(dep),int):
+                    print('BB')
+                    department_set = department_set.objects.filter(id = int(post_dict['task_department_id']))
+                    task_set = task_set.objects.filter(department__in= department_set)
+            if dont_skip_loc:
+                if  post_dict['task_location_id']!="" and isinstance(int(loc),int):
+                    print('CC')
+                    location_set = location_set.objects.filter(id = int(post_dict['task_location_id']))
+                    print('CC1')
+                    task_set = task_set.objects.filter(location__in= location_set)
+                    print('CC')
+            if  post_dict['time_commitment']!="" and isinstance(int(com),int):
+                print('DD')
+                task_set = task_set.objects.filter(time_commitment__lte= int(com))
+                print('EE')
+            context = {'task_set':task_set,'location_set':location_set,'department_set':department_set}
+            return render(request, 'tasktrader/tasks.html',context)
         else:
-            company_set = Company.objects.all()
-            location_set = Location.objects.all()
-            department_set = Department.objects.all()
-            skill_set = Skill.objects.all()
-            context = {'company_set':company_set,'location_set':location_set,'department_set':department_set,'skill_set':skill_set}
-            return render(request, 'tasktrader/create.html',context)
+            current_employee = Employee.objects.get(id=1)
+            company = Company.objects.filter(id=int(current_employee.location.company_id.id))
+            location_set = Location.objects.filter(company_id__in=company)
+            task_set = Task.objects.filter(location__in= location_set)
+            department_set = Department.objects.filter(company_id__in=company)
+            context = {'task_set':task_set,'location_set':location_set,'department_set':department_set}
+            return render(request, 'tasktrader/tasks.html',context)
+
     except ObjectDoesNotExist as e:
         print("There is no answer that exist the database: ", str(e))
-        return HttpResponse("Something went wrong...(create)")
+        return HttpResponse("Something went wrong...(tasks) 1")
     except ValueError:
         print("Could not convert data to an integer.")
-        return HttpResponse("Something went wrong...create) 2")
+        return HttpResponse("Something went wrong...(tasks) 2")
     except:
         print("Unexpected error:", sys.exc_info()[0])
-        return HttpResponse("Something went wrong...create) 3")
+        return HttpResponse("Something went wrong...(tasks) 3")
     else:
         print('Something went wrong...')
-        return HttpResponse("Something went wrong...create) 4")
-    
-    return render(request, 'tasktrader/tasks.html')
+        return HttpResponse("Something went wrong...(tasks) 4")

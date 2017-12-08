@@ -75,7 +75,7 @@ class Task(models.Model):
     status = models.ForeignKey(Status, on_delete = models.CASCADE)
 
     def  __str__(self):
-        return_value = (str(self.id), + " , "+str(self.task_title) + ", "+ str(self.status.status_type))
+        return_value = (str(self.id) + " , "+str(self.task_title))
         return return_value
 
 class CV(models.Model):
