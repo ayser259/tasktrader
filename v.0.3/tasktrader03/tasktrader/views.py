@@ -353,8 +353,8 @@ def dashboard(request):
     return render(request, 'tasktrader/dashboard.html')
 
 def explore(request):
-
-    programs = ['PYTHON','SQL','R','PHOTOSHOP','VBA','JAVA','C#','PHOTOGRAPHY','EXCEL',
+    print('exploreing')
+    programs = ["PYTHON","SQL",'R','PHOTOSHOP','VBA','JAVA','C#','PHOTOGRAPHY','EXCEL',
                 'POWERPOINT','PREZI','PHOTO-EDITING','VIDEO-EDITING','PAINTING','FINANCIAL ANALYSIS','PROGRAMMING','ALGORITHMS',
                 'SUMMARIZATION','PROOF READING']
 
@@ -362,7 +362,6 @@ def explore(request):
     SUFFIX = [' HELP NEEDED',' TASK NEEDED FOR DEPARTMENT PROJECT',' TASK AVAILABLE',' TUTOROIALS REQUIRED']
     DEPARTMENT = ['CORPORTATE STRATEGY PROJECT','PRODUCT DEVELOPMENT PROJECT','MARKETING PROJECT','ADVERTISING PROJECT','INSTAGRAM PROJECT','WHATSAPP PROJECT','OCULUS PROJECT']
     res = []
-
     for item in programs:
         for pre in PREFIX:
             res.append(pre+item)
@@ -370,35 +369,20 @@ def explore(request):
             res.append(item+suf)
         for dep in DEPARTMENT:
             res.append(dep)
+    print('res is')
+    print(len(res))
 
-    res1 = []
+    year_range = [str(i) for i in range(1900, 2014)]
+    month_range = ["01","02","03","04","05","06","07","08","09","10","11","12"]
+    day_range = [str(i).zfill(2) for i in range(1,28)]
+    num_range = ["11","10","9","8","7","6"]
+    emp_range = ["2","3","4","5","6","7"]
 
-    # making list bigger
-    print('expanding list...')
-    for item in res :
-        for i in range(30):
-            res1.append(item)
-
-    # shuffling data
-    print('shuffling...')
-    for i in range(100):
-        a = randint(0, len(res1)-1)
-        b = randint(0,len(res1)-1)
-        first =''
-        second =''
-        first = res1[a]
-        second = res1[b]
-        res1[b] = first
-        res1[a] = second
-
-        year_range = [str(i) for i in range(1900, 2014)]
-        month_range = ["01","02","03","04","05","06","07","08","09","10","11","12"]
-        day_range = [str(i).zfill(2) for i in range(1,28)]
-        num_range = ["11","10","9","8","7","6"]
-        emp_range = ["2","3","4","5","6","7"]
-    for item in res1:
+    for re in res:
+        print(123)
+        print(re)
         new_task = Task()
-        new_task.task_title = item
+        new_task.task_title = re
         new_task.task_description ="rem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book."
         date_1 = (random.choice(year_range)+'-'+random.choice(month_range)+'-'+random.choice(day_range))
         date_2 = (random.choice(year_range)+'-'+random.choice(month_range)+'-'+random.choice(day_range))
@@ -419,7 +403,7 @@ def explore(request):
         new_task_skill.task_id = new_task
         new_task_skill.skill_id = Skill.objects.get(id=int(random.choice(emp_range)))
         new_task_skill.save()
-
+            # Data generation code for tasks is below
     return HttpResponse('Data Generated')
 
 def insert_task(request):
@@ -454,6 +438,11 @@ def tasks(request):
             com = post_dict['time_commitment']
             print('com is')
             print(com)
+            print('dep is')
+            print(dep)
+            print('loc is')
+            print(loc)
+
             dont_skip_dep = True
             dont_skip_loc = True
 
@@ -464,22 +453,17 @@ def tasks(request):
                 print('YES loc is All')
                 dont_skip_loc = False
 
-            if dont_skip_dep:
+            if dont_skip_dep==True:
                 if  post_dict['task_department_id']!="" and isinstance(int(dep),int):
-                    print('BB')
-                    department_set = department_set.objects.filter(id = int(post_dict['task_department_id']))
-                    task_set = task_set.objects.filter(department__in= department_set)
-            if dont_skip_loc:
-                if  post_dict['task_location_id']!="" and isinstance(int(loc),int):
-                    print('CC')
-                    location_set = location_set.objects.filter(id = int(post_dict['task_location_id']))
-                    print('CC1')
-                    task_set = task_set.objects.filter(location__in= location_set)
-                    print('CC')
+                    department_set = department_set.filter(id= int(dep))
+                    print('cc')
+                    task_set = task_set.filter(department__in=department_set)
+            if dont_skip_loc==True:
+                if post_dict['task_location_id']!="" and isinstance(int(loc),int):
+                    location_set = location_set.filter(id = int(loc))
+                    task_set = task_set.filter(location__in=location_set)
             if  post_dict['time_commitment']!="" and isinstance(int(com),int):
-                print('DD')
-                task_set = task_set.objects.filter(time_commitment__lte= int(com))
-                print('EE')
+                task_set = task_set.filter(time_commitment = int(com))
             context = {'task_set':task_set,'location_set':location_set,'department_set':department_set}
             return render(request, 'tasktrader/tasks.html',context)
         else:
