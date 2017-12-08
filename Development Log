@@ -7,19 +7,28 @@ Note :
 
 Remaining Tasks:
 
+Medium pri:
 
-- Skills for each task ? How to populate 
-- View to See tasks that have already been made
-- Create view to search for tasks
+- Input tasks in into task skills
 
-- create view to apply for tasks
+- create profile page, add skills into employee skills
 
-- edit profile view 
+- Create view for individual tasks 
 
-- view profile
+- create button on tasks to view each individual task
 
-- create view to view and select applicants
+- create apply to job mechanism and add jobs for applied to 
 
+- Which jobs did you apply to ?
+
+
+Low Pri
+
+- Dashboard ? Low pRi
+
+- explore, low price
+
+- 
 
 Completed on 21:00-3rd-Dec-17:
 - Forgot to track log over past few weeks, haven’t uploaded to git
